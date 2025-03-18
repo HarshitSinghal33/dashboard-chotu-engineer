@@ -1,6 +1,4 @@
 "use client";
-
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -12,28 +10,7 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 
-const dummyData = [
-  {
-    id: 1,
-    image: "/placeholder.jpg", // Replace with actual image path
-    title: "Sample Product 1",
-    slug: "sample-product-1",
-  },
-  {
-    id: 2,
-    image: "/placeholder.jpg",
-    title: "Sample Product 2",
-    slug: "sample-product-2",
-  },
-  {
-    id: 3,
-    image: "/placeholder.jpg",
-    title: "Sample Product 3",
-    slug: "sample-product-3",
-  },
-];
-
-export default function BlogList({ blogs }) {
+export default function BlogList({ blogs }: any) {
   return (
     <div className="container mx-auto p-4">
       <Table className="border rounded-lg shadow-md overflow-hidden">
@@ -46,7 +23,7 @@ export default function BlogList({ blogs }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {blogs.map((blog) => (
+          {blogs.map((blog: any) => (
             <TableRow key={blog._id} className="hover:bg-gray-50 transition">
               <TableCell>
                 {/* <Image
