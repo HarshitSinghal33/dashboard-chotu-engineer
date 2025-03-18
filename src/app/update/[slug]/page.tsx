@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 // import { useRouter } from "next/navigation";
 
-const CreateBlogPage = ({ params }: { params: { slug: string } }) => {
+const CreateBlogPage = ({ params }: any) => {
   const { slug } = params; // Access the `slug` from the route parameters
   // const router = useRouter();
 
