@@ -11,7 +11,7 @@ import { Switch } from "@/components/ui/switch";
 // import { useRouter } from "next/navigation";
 
 const CreateBlogPage = ({ params }: { params: { slug: string } }) => {
-  const { slug } = use(params); // Access the `slug` from the route parameters
+  const { slug } = params; // Access the `slug` from the route parameters
   // const router = useRouter();
 
   const [formState, setFormState] = useState({
