@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     await newBlog.save();
   } catch (error) {
     return NextResponse.json({
-        message: error.message,
+        message: "cannot saved",
         
       });
   }
