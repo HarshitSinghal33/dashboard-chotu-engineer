@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 // Fetch a blog by slug
 export async function GET(
   req: Request,
-  { params }: { params: { slug: string } }
+  { params }: any
 ) {
   await connectToDatabase();
   console.log(params);
@@ -22,7 +22,7 @@ export async function GET(
 // Update a blog by slug
 export async function PUT(
   req: Request,
-  { params }: { params: { slug: string } }
+  { params }: any
 ) {
   await connectToDatabase();
   const { title, content, metaTitle, metaDescription, tags, published } =
@@ -53,7 +53,7 @@ export async function PUT(
 // Delete a blog by slug
 export async function DELETE(
   req: Request,
-  { params }: { params: { slug: string } }
+  { params }: any
 ) {
   await connectToDatabase();
   const deletedBlog = await Blog.findOneAndDelete({ slug: params.slug }); // Delete by slug
