@@ -38,8 +38,10 @@ export async function POST(req: Request) {
   try {
     await newBlog.save();
   } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "An unknown error occurred";
     return NextResponse.json({
-      message: error.message
+      message: errorMessage
     });
   }
 

@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 
-const CreateBlogPage = ({ params }: any) => {
+const CreateBlogPage = ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = React.use(params);
 
   const [formState, setFormState] = useState({

@@ -18,7 +18,7 @@ export async function GET(
   return NextResponse.json(blog);
 }
 
-export async function PUT(req, { params }) {
+export async function PUT(req: Request, { params }: any) {
   try {
     await connectToDatabase();
 
