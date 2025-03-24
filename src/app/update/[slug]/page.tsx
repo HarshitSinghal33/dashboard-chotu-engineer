@@ -8,11 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-// import { useRouter } from "next/navigation";
 
 const CreateBlogPage = ({ params }: any) => {
-  const { slug } = params; // Access the `slug` from the route parameters
-  // const router = useRouter();
+  const { slug } = React.use(params);
 
   const [formState, setFormState] = useState({
     title: "",
@@ -75,8 +73,6 @@ const CreateBlogPage = ({ params }: any) => {
       published: formState.published,
     };
 
-    console.log(blogData, "blog data");
-
     // Submit the updated data
     const res = await fetch(`/api/blogs/${slug}`, {
       method: "PUT",
@@ -85,7 +81,6 @@ const CreateBlogPage = ({ params }: any) => {
     });
 
     const responseJson = await res.json();
-    console.log(responseJson);
 
     // if (res.ok) {
     //   router.push("/blogs"); // Redirect after success

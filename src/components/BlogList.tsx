@@ -16,7 +16,7 @@ export default function BlogList({ blogs }: any) {
       <Table className="border rounded-lg shadow-md overflow-hidden">
         <TableHeader>
           <TableRow className="bg-gray-100">
-            <TableHead className="w-24">Image</TableHead>
+            {/* <TableHead className="w-24">Image</TableHead> */}
             <TableHead>Title</TableHead>
             <TableHead>Slug</TableHead>
             <TableHead className="text-right">Action</TableHead>
@@ -25,15 +25,15 @@ export default function BlogList({ blogs }: any) {
         <TableBody>
           {blogs.map((blog: any) => (
             <TableRow key={blog._id} className="hover:bg-gray-50 transition">
-              <TableCell>
-                {/* <Image
+              {/* <TableCell>
+                <Image
                   src={item.image}
                   alt={item.title}
                   width={50}
                   height={50}
                   className="rounded-md object-cover"
-                /> */}
-              </TableCell>
+                />
+              </TableCell> */}
               <TableCell>{blog.title}</TableCell>
               <TableCell>{blog.slug}</TableCell>
               <TableCell className="text-right">

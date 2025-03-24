@@ -6,26 +6,30 @@ if (!MONGODB_URI) {
   throw new Error("Please define the MONGODB_URI environment variable");
 }
 
-declare global {
-  var mongooseCache: {
-    conn: mongoose.Mongoose | null;
-    promise: Promise<mongoose.Mongoose> | null;
-  };
-}
-
-global.mongooseCache = global.mongooseCache || { conn: null, promise: null };
+let cached = (global as any).mongooseCache || { conn: null, promise: null };
 
 export async function connectToDatabase() {
-  if (global.mongooseCache.conn) return global.mongooseCache.conn;
-
-  if (!global.mongooseCache.promise) {
-    global.mongooseCache.promise = mongoose
+  if (cached.conn) return cached.conn;
+  if (!cached.promise) {
+    cached.promise = mongoose
       .connect(MONGODB_URI, {
         dbName: "BlogDB",
+        bufferCommands: false,
       })
-      .then((mongoose) => mongoose);
+      .then((mongoose) => mongoose)
+      .catch((error) => {
+        cached.promise = null;
+        console.error("MongoDB connection error:", error);
+        throw new Error("Database connection failed. Please try again later.");
+      });
   }
 
-  global.mongooseCache.conn = await global.mongooseCache.promise;
-  return global.mongooseCache.conn;
+  try {
+    cached.conn = await cached.promise;
+  } catch (error) {
+    throw error;
+  }
+
+  (global as any).mongooseCache = cached;
+  return cached.conn;
 }

@@ -11,18 +11,14 @@ interface RichTextEditorProps {
 
 const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange }) => {
   const { quill, quillRef } = useQuill({ placeholder: "Start typing here..." });
-  const isInitialized = useRef(false); // Track if Quill is initialized
+  const isInitialized = useRef(false);
 
-  // Initialize Quill with the initial value
   useEffect(() => {
-    console.log(value, 'outside');
-    
-    if (quill && value) {
-      console.log(value, 'inside');
-      quill.clipboard.dangerouslyPasteHTML(value || ""); // Set initial value
-    //   isInitialized.current = true; // Mark as initialized
+    if (quill && !isInitialized.current && value) {
+      quill.clipboard.dangerouslyPasteHTML(value || "");
+      isInitialized.current = true;
     }
-  }, [quill]);
+  }, [quill, value]);
 
   useEffect(() => {
     if (quill) {
@@ -36,10 +32,8 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange }) => {
   }, [quill, onChange]);
 
   return (
-    <div className="container mx-auto h-[86vh]">
-      <div className="border rounded-lg shadow-xl overflow-hidden h-full">
-        <div ref={quillRef} />
-      </div>
+    <div className="container mx-auto overflow-auto h-[60vh] border rounded-lg shadow-xl">
+      <div ref={quillRef} />
     </div>
   );
 };

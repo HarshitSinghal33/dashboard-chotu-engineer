@@ -2,6 +2,7 @@
 import BlogList from "@/components/BlogList";
 import Header from "../components/Header";
 import { useEffect, useState } from "react";
+import Loader from "@/components/Loader";
 
 export default function Home() {
   const [blogs, setBlogs] = useState([]);
@@ -10,10 +11,7 @@ export default function Home() {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await fetch('/api/blogs'); // The API route you defined
-        // if (!response.ok) {
-        //   throw new Error('Failed to fetch blogs');
-        // }
+        const response = await fetch('/api/blogs');
         const data = await response.json();
         setBlogs(data);
       } catch (error) {
@@ -26,16 +24,10 @@ export default function Home() {
     fetchBlogs();
   }, []);
 
-  console.log(blogs);
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
   return (
     <>
       <Header />
-      <BlogList blogs={blogs}/>
+      {loading ? <Loader height={84} /> : <BlogList blogs={blogs}/>}
     </>
   );
 }

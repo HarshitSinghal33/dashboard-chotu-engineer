@@ -8,7 +8,6 @@ export async function GET(
   { params }: any
 ) {
   await connectToDatabase();
-  console.log(params);
 
   const blog = await Blog.findOne({ slug: params.slug }); // Fetch by slug
 
@@ -19,35 +18,44 @@ export async function GET(
   return NextResponse.json(blog);
 }
 
-// Update a blog by slug
-export async function PUT(
-  req: Request,
-  { params }: any
-) {
-  await connectToDatabase();
-  const { title, content, metaTitle, metaDescription, tags, published } =
-    await req.json();
+export async function PUT(req, { params }) {
+  try {
+    await connectToDatabase();
 
-  const updatedBlog = await Blog.findOneAndUpdate(
-    { slug: params.slug }, // Update by slug
-    {
-      title,
-      slug: title.toLowerCase().replace(/\s+/g, "-"), // Regenerate slug if title changes
-      content,
-      metaTitle,
-      metaDescription,
-      tags,
-      published,
-      publishedAt: published ? new Date() : null,
-    },
-    { new: true }
-  );
+    if (!params?.slug) {
+      return NextResponse.json({ error: "Slug parameter is required" }, { status: 400 });
+    }
 
-  if (!updatedBlog) {
-    return NextResponse.json({ error: "Blog not found" }, { status: 404 });
+    const body = await req.json();
+    const { title, content, metaTitle, metaDescription, tags, published } = body;
+
+    if (!title || !content) {
+      return NextResponse.json({ error: "Title and content are required" }, { status: 400 });
+    }
+
+    const updatedBlog = await Blog.findOneAndUpdate(
+      { slug: params.slug },
+      {
+        title,
+        content,
+        metaTitle: metaTitle || "",
+        metaDescription: metaDescription || "",
+        tags: tags || [],
+        published: Boolean(published),
+        publishedAt: published ? new Date() : null,
+      },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedBlog) {
+      return NextResponse.json({ error: "Blog not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: "Blog updated successfully", blog: updatedBlog });
+  } catch (error) {
+    console.error("Error updating blog:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
-
-  return NextResponse.json({ message: "Blog updated", blog: updatedBlog });
 }
 
 // Delete a blog by slug

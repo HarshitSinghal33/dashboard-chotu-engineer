@@ -42,19 +42,16 @@ const CreateBlogPage = () => {
       published: false,
     };
 
-    console.log(blogData, "blog data");
 
-    // const res = await fetch("/api/blogs", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(blogData),
-    // });
+    const res = await fetch("/api/blogs", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(blogData),
+    });
 
-    // const responseJson = await res.json();
-
-    // console.log(responseJson);
+    const responseJson = await res.json();
+    console.log(responseJson);
     
-
     // if (res.ok) {
     //   router.push("/blogs"); // Redirect after success
     // }
