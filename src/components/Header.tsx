@@ -4,9 +4,25 @@ import { useState } from "react";
 import Link from "next/link";
 import { APP_NAME } from "../../constants";
 import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      const res = await axios.get("/api/logout");
+
+      if (res.status === 200) {
+        router.push("/login");
+        router.refresh();
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
   return (
     <header className="bg-white shadow-md  w-full z-50">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
@@ -20,11 +36,9 @@ export default function Header() {
               Create
             </Button>
           </Link>
-          <Link
-            href="/signin"
-          >
-            <Button variant="outline">Sign In</Button>
-          </Link>
+          <Button variant="outline" onClick={handleLogout}>
+            Log out
+          </Button>
         </nav>
 
         <button

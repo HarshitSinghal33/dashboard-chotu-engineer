@@ -1,6 +1,7 @@
 import { connectToDatabase } from "@/lib/mongodb";
 import { Blog } from "@/lib/models/Blog";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { verifyAuth } from "@/lib/auth";
 
 // Fetch a blog by slug
 export async function GET(
@@ -8,6 +9,7 @@ export async function GET(
   { params }: any
 ) {
   await connectToDatabase();
+  await params;
 
   const blog = await Blog.findOne({ slug: params.slug }); // Fetch by slug
 
@@ -18,9 +20,21 @@ export async function GET(
   return NextResponse.json(blog);
 }
 
-export async function PUT(req: Request, { params }: any) {
+export async function PUT(req: NextRequest, { params }: any) {
+  const token = req.cookies.get('token')?.value;
+  
+  if (!token) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  try {
+    await verifyAuth(token);
+  } catch (error) {
+    return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+  }
   try {
     await connectToDatabase();
+    await params;
 
     if (!params?.slug) {
       return NextResponse.json({ error: "Slug parameter is required" }, { status: 400 });
@@ -60,9 +74,21 @@ export async function PUT(req: Request, { params }: any) {
 
 // Delete a blog by slug
 export async function DELETE(
-  req: Request,
+  req: NextRequest,
   { params }: any
 ) {
+  const token = req.cookies.get('token')?.value;
+  await params;
+  
+  if (!token) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  try {
+    await verifyAuth(token);
+  } catch (error) {
+    return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+  }
   await connectToDatabase();
   const deletedBlog = await Blog.findOneAndDelete({ slug: params.slug }); // Delete by slug
 
