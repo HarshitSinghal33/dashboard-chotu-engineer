@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { verifyAuth } from "./lib/auth";
 
 const allowedOrigins = [
-  "https://chotu-engineer.vercel.app/",
+  "https://www.chotuengineer.com",
 ];
 
 export async function middleware(request: NextRequest) {
