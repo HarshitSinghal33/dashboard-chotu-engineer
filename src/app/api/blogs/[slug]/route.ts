@@ -65,6 +65,26 @@ export async function PUT(req: NextRequest, { params }: any) {
       return NextResponse.json({ error: "Blog not found" }, { status: 404 });
     }
 
+    try {
+      const blogAppUrl = 'https://www.chotuengineer.com';
+      const revalidationResponse = await fetch(`${blogAppUrl}/api/revalidate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ path: `/blog/${params.slug}` }),
+      });
+
+      if (!revalidationResponse.ok) {
+        console.error('Failed to revalidate blog page:', revalidationResponse.status, revalidationResponse.statusText);
+      } else {
+        console.log(`Blog page /blog/${params.slug} revalidated successfully.`);
+      }
+    } catch (revalidationError) {
+      console.error('Error revalidating blog page:', revalidationError);
+    }
+
     return NextResponse.json({ message: "Blog updated successfully", blog: updatedBlog });
   } catch (error) {
     console.error("Error updating blog:", error);
