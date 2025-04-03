@@ -2,6 +2,7 @@ import { connectToDatabase } from "@/lib/mongodb";
 import { Blog } from "@/lib/models/Blog";
 import { NextRequest, NextResponse } from "next/server";
 import { verifyAuth } from "@/lib/auth";
+import { SitemapItem } from "@/lib/models/Sitemap";
 
 export async function GET() {
   try {
@@ -28,7 +29,6 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     return NextResponse.json({ error: "Invalid token" }, { status: 401 });
   }
-  
   await connectToDatabase();
   const { title, slug, content, metaTitle, metaDescription, tags, published } =
     await req.json();
@@ -50,6 +50,10 @@ export async function POST(req: NextRequest) {
 
   try {
     await newBlog.save();
+    if (published) {
+      const newSitemapItem = new SitemapItem({ slug });
+      await newSitemapItem.save();
+    }
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "An unknown error occurred";

@@ -2,6 +2,7 @@ import { connectToDatabase } from "@/lib/mongodb";
 import { Blog } from "@/lib/models/Blog";
 import { NextRequest, NextResponse } from "next/server";
 import { verifyAuth } from "@/lib/auth";
+import { SitemapItem } from "@/lib/models/Sitemap";
 
 // Fetch a blog by slug
 export async function GET(
@@ -40,6 +41,12 @@ export async function PUT(req: NextRequest, { params }: any) {
       return NextResponse.json({ error: "Slug parameter is required" }, { status: 400 });
     }
 
+    const originalBlog = await Blog.findOne({ slug: params.slug });
+
+    if (!originalBlog) {
+      return NextResponse.json({ message: 'Blog post not found' }, {status: 404});
+    }
+
     const body = await req.json();
     const { title, content, metaTitle, metaDescription, tags, published } = body;
 
@@ -62,7 +69,21 @@ export async function PUT(req: NextRequest, { params }: any) {
     );
 
     if (!updatedBlog) {
-      return NextResponse.json({ error: "Blog not found" }, { status: 404 });
+      return NextResponse.json({ error: "Blog not updated" }, { status: 500 });
+    }
+
+    if (originalBlog && updatedBlog) {
+      const previousPublished = originalBlog.published;
+      const currentPublished = updatedBlog.published;
+
+      if (previousPublished !== currentPublished) {
+        if (previousPublished === false && currentPublished === true) {
+          const newSitemapItem = new SitemapItem({ slug: updatedBlog.slug });
+          await newSitemapItem.save();
+        } else if (previousPublished === true && currentPublished === false) {
+          await SitemapItem.deleteOne({ slug: updatedBlog.slug });
+        }
+      }
     }
 
     try {
