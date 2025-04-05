@@ -11,6 +11,8 @@ import {
 import Link from "next/link";
 
 export default function BlogList({ blogs }: any) {
+  const handleBlogDelete = async () => {};
+
   return (
     <div className="container mx-auto p-4">
       <Table className="border rounded-lg shadow-md overflow-hidden">
@@ -19,7 +21,8 @@ export default function BlogList({ blogs }: any) {
             {/* <TableHead className="w-24">Image</TableHead> */}
             <TableHead>Title</TableHead>
             <TableHead>Slug</TableHead>
-            <TableHead className="text-right">Action</TableHead>
+            <TableHead>Published</TableHead>
+            <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -36,12 +39,12 @@ export default function BlogList({ blogs }: any) {
               </TableCell> */}
               <TableCell>{blog.title}</TableCell>
               <TableCell>{blog.slug}</TableCell>
-              <TableCell className="text-right">
-                <Link href={`/update/${blog.slug}`}>
-                  <Button variant="outline">
-                    Update
-                  </Button>
+              <TableCell>{JSON.stringify(blog.published)}</TableCell>
+              <TableCell>
+                <Link href={`/update/${blog.slug}`} style={{marginRight: "12px"}}>
+                  <Button variant="outline">Update</Button>
                 </Link>
+                <Button variant="outline">Delete</Button>
               </TableCell>
             </TableRow>
           ))}

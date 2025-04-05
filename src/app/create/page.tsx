@@ -7,12 +7,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 
 const CreateBlogPage = () => {
   const [formState, setFormState] = useState({
     title: "",
     slug: "",
-    imgUrl: "",
+    // imgUrl: "",
     metaTitle: "",
     metaDescription: "",
     tags: "",
@@ -71,7 +72,7 @@ const CreateBlogPage = () => {
           />
         </div>
 
-        <div>
+        {/* <div>
           <Label htmlFor="imgUrl">imgUrl</Label>
           <Input
             id="imgUrl"
@@ -79,7 +80,7 @@ const CreateBlogPage = () => {
             onChange={handleChange}
             placeholder="Enter blog Image Url"
           />
-        </div>
+        </div> */}
 
         <div>
           <Label htmlFor="slug">Slug</Label>
@@ -87,8 +88,19 @@ const CreateBlogPage = () => {
         </div>
 
         <div>
+          <Label htmlFor="published">Published</Label>
+          <Switch
+            id="published"
+            checked={formState.published}
+            onCheckedChange={(val) =>
+              setFormState((prev) => ({ ...prev, published: val }))
+            }
+          />
+        </div>
+
+        <div>
           <Label htmlFor="metaTitle">Meta Title</Label>
-          <Input id="metaTitle" value={formState.metaTitle} placeholder="metaTitle" onChange={handleChange} />
+          <Input id="metaTitle" value={formState.metaTitle} placeholder="Meta Title" onChange={handleChange} />
         </div>
 
         <div>

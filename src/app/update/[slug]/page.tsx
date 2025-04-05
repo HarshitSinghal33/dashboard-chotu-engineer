@@ -15,7 +15,6 @@ const CreateBlogPage = ({ params }: { params: Promise<{ slug: string }> }) => {
   const [formState, setFormState] = useState({
     title: "",
     slug: "",
-    imgUrl: "",
     metaTitle: "",
     metaDescription: "",
     tags: "",
@@ -23,7 +22,6 @@ const CreateBlogPage = ({ params }: { params: Promise<{ slug: string }> }) => {
     published: false,
   });
 
-  // Fetch data from the API when the component mounts
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -32,12 +30,13 @@ const CreateBlogPage = ({ params }: { params: Promise<{ slug: string }> }) => {
           throw new Error("Failed to fetch data");
         }
         const data = await response.json();
+        console.log(data);
+        
 
         // Update the form state with the fetched data
         setFormState({
           title: data.title,
           slug: data.slug,
-          imgUrl: "",
           metaTitle: data.metaTitle,
           metaDescription: data.metaDescription,
           tags: data.tags.join(", "), // Convert tags array to a comma-separated string
@@ -80,7 +79,7 @@ const CreateBlogPage = ({ params }: { params: Promise<{ slug: string }> }) => {
       body: JSON.stringify(blogData),
     });
 
-    const responseJson = await res.json();
+    // const responseJson = await res.json();
 
     // if (res.ok) {
     //   router.push("/blogs"); // Redirect after success
@@ -101,7 +100,7 @@ const CreateBlogPage = ({ params }: { params: Promise<{ slug: string }> }) => {
           />
         </div>
 
-        <div>
+        {/* <div>
           <Label htmlFor="imgUrl">Image URL</Label>
           <Input
             id="imgUrl"
@@ -109,7 +108,7 @@ const CreateBlogPage = ({ params }: { params: Promise<{ slug: string }> }) => {
             onChange={handleChange}
             placeholder="Enter blog Image URL"
           />
-        </div>
+        </div> */}
 
         <div>
           <Label htmlFor="slug">Slug</Label>
@@ -118,7 +117,17 @@ const CreateBlogPage = ({ params }: { params: Promise<{ slug: string }> }) => {
             value={formState.slug}
             onChange={handleChange}
             placeholder="Slug"
-            disabled // Disable slug editing if needed
+          />
+        </div>
+        
+        <div>
+          <Label htmlFor="published">Published</Label>
+          <Switch
+            id="published"
+            checked={formState.published}
+            onCheckedChange={(val) =>
+              setFormState((prev) => ({ ...prev, published: val }))
+            }
           />
         </div>
 
@@ -132,16 +141,7 @@ const CreateBlogPage = ({ params }: { params: Promise<{ slug: string }> }) => {
           />
         </div>
 
-        <div>
-          <Label htmlFor="published">Published</Label>
-          <Switch
-            id="published"
-            checked={formState.published}
-            onCheckedChange={(val) =>
-              setFormState((prev) => ({ ...prev, published: val }))
-            }
-          />
-        </div>
+        
 
         <div>
           <Label htmlFor="metaDescription">Meta Description</Label>

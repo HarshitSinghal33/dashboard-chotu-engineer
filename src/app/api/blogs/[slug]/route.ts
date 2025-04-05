@@ -106,7 +106,7 @@ export async function PUT(req: NextRequest, { params }: any) {
       console.error('Error revalidating blog page:', revalidationError);
     }
 
-    return NextResponse.json({ message: "Blog updated successfully", blog: updatedBlog });
+    return NextResponse.json({ message: "Blog updated successfully" });
   } catch (error) {
     console.error("Error updating blog:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
