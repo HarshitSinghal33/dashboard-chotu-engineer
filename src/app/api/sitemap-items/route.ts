@@ -7,7 +7,12 @@ export async function GET() {
   try {
     await connectToDatabase();
     const sitemapItems = await SitemapItem.find();
-    return NextResponse.json(sitemapItems);
+    return new NextResponse(JSON.stringify(sitemapItems), {
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-store',
+      },
+    });
   } catch (error) {
     console.error('Error fetching sitemap items:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
