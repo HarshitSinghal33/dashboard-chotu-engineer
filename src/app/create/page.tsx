@@ -40,22 +40,13 @@ const CreateBlogPage = () => {
     const blogData = {
       ...formState,
       tags: formState.tags.split(",").map((tag) => tag.trim()),
-      published: false,
     };
-
-
-    const res = await fetch("/api/blogs", {
+    
+    await fetch("/api/blogs", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(blogData),
     });
-
-    const responseJson = await res.json();
-    console.log(responseJson);
-    
-    // if (res.ok) {
-    //   router.push("/blogs"); // Redirect after success
-    // }
   };
 
   return (

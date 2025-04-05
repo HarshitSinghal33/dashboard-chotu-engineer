@@ -33,13 +33,9 @@ export async function POST(req: NextRequest) {
   const { title, slug, content, metaTitle, metaDescription, tags, published } =
     await req.json();
 
-  const usedSlug = Boolean(slug)
-    ? slug
-    : title.toLowerCase().replace(/\s+/g, "-");
-
   const newBlog = new Blog({
     title,
-    slug: usedSlug,
+    slug,
     content,
     metaTitle,
     metaDescription,
