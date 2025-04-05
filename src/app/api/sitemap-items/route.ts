@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { SitemapItem } from '@/lib/models/Sitemap';
 import { connectToDatabase } from '@/lib/mongodb';
 import { NextResponse } from 'next/server';
